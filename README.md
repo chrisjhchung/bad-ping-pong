@@ -36,7 +36,7 @@ To run **Bad Ping Pong** on your local machine, follow these simple steps:
 3. Install the project dependencies:
 
    ```bash
-   npm install
+   yarn install
    ```
 
 ### Running the Game
@@ -44,7 +44,7 @@ To run **Bad Ping Pong** on your local machine, follow these simple steps:
 Once you've installed the dependencies, you can run the game locally using the following command:
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 This command will start the development server and open the game in your default web browser.
