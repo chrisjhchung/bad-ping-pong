@@ -1,0 +1,12 @@
+.canvas {
+  background: black;
+  height: 100svh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.scores {
+  position: absolute;
+  color: white;
+}

@@ -1,0 +1,10 @@
+.brick {
+  margin-left: calc(100svh * 0.1 / 4);
+  margin-right: calc(100svh * 0.1 / 4);
+  height: calc(10svh + (10svh / 3));
+  width: calc(100svh * 0.1 / 4.5);
+  background: white;
+  transform: translateY(45vh);
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}

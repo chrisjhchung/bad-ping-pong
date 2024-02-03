@@ -1,0 +1,9 @@
+.ball {
+  height: calc(100svh * 0.1 / 3);
+  width: calc(100svh * 0.1 / 3);
+  background: white;
+  transform: translate(50vw, 50vh);
+  transition: all 0.2s ease;
+  position: absolute;
+  border-radius: 4px;
+}
