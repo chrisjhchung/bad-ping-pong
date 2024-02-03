@@ -1,4 +1,4 @@
-<img src="https://github.com/chrisjhchung/bad-ping-pong/blob/main/assets/37494613/fcfe9009-bda5-4e5e-b449-d2f9f419df35.png" height="250px" width="250px" />
+<img src="https://play-lh.googleusercontent.com/-HPshXRS9mGcEoBDxoR2CQAjzye4eWYBF-Kev9BP_89-ZQN76nfcxnvU-VWAli-9crE" height="250px" width="250px" />
 
 # Bad Ping Pong
 
