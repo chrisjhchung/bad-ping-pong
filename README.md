@@ -1,4 +1,6 @@
-# Bad Ping Pong Game
+<img src="https://play-lh.googleusercontent.com/-HPshXRS9mGcEoBDxoR2CQAjzye4eWYBF-Kev9BP_89-ZQN76nfcxnvU-VWAli-9crE" height="250px" width="250px" />
+
+# Bad Ping Pong
 
 Welcome to **Bad Ping Pong** – a unique twist on the classic Pong game where you'll experience the challenges of bad ping affecting your gameplay. In this game, you'll face varying levels of delay as you play, making it a fun and challenging experience.
 
