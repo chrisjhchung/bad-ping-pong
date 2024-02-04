@@ -7,11 +7,14 @@ import useEventListener from "../../hooks/useEventListener";
 const PLAYER_MOVEMENT_KEYS = ["w", "s"];
 const OPPONENT_MOVEMENT_KEYS = ["ArrowUp", "ArrowDown"];
 const TRANSLATE_STEP = 5;
+const PING_VALUES = [0, 500, 1000];
 
 const Canvas = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  const [ping, setPing] = useState(0);
 
   const player = useRef();
   const playerY = useRef(45);
@@ -22,30 +25,38 @@ const Canvas = () => {
   const ball = useRef();
 
   function handler({ key }) {
-    if (PLAYER_MOVEMENT_KEYS.includes(key)) {
-      if (key === "w") {
-        playerY.current = Math.max(playerY.current - TRANSLATE_STEP, 0);
-      } else if (key === "s") {
-        playerY.current = Math.min(
-          playerY.current + TRANSLATE_STEP,
-          90 - 10 / 3
-        );
-      }
-
-      player.current.style.transform = `translateY(${playerY.current}vh)`;
+    if (key === " ") {
+      setIsPaused((prev) => !prev);
     }
 
-    if (OPPONENT_MOVEMENT_KEYS.includes(key)) {
-      if (key === "ArrowUp") {
-        opponentY.current = Math.max(opponentY.current - TRANSLATE_STEP, 0);
-      } else if (key === "ArrowDown") {
-        opponentY.current = Math.min(
-          opponentY.current + TRANSLATE_STEP,
-          90 - 10 / 3
-        );
+    if (!isPaused) {
+      if (PLAYER_MOVEMENT_KEYS.includes(key)) {
+        if (key === "w") {
+          playerY.current = Math.max(playerY.current - TRANSLATE_STEP, 0);
+        } else if (key === "s") {
+          playerY.current = Math.min(
+            playerY.current + TRANSLATE_STEP,
+            90 - 10 / 3
+          );
+        }
+        setTimeout(() => {
+          player.current.style.transform = `translateY(${playerY.current}vh)`;
+        }, ping);
       }
 
-      opponent.current.style.transform = `translateY(${opponentY.current}vh)`;
+      if (OPPONENT_MOVEMENT_KEYS.includes(key)) {
+        if (key === "ArrowUp") {
+          opponentY.current = Math.max(opponentY.current - TRANSLATE_STEP, 0);
+        } else if (key === "ArrowDown") {
+          opponentY.current = Math.min(
+            opponentY.current + TRANSLATE_STEP,
+            90 - 10 / 3
+          );
+        }
+        setTimeout(() => {
+          opponent.current.style.transform = `translateY(${opponentY.current}vh)`;
+        }, ping);
+      }
     }
   }
   const yDir = useRef(0);
@@ -56,7 +67,7 @@ const Canvas = () => {
 
   const getBallPosition = () => {
     const ballTransformValue = ball.current.style.transform;
-    const ballRegex = /translate\(([\d.]+vw), ([\d.]+vh)\)/;
+    const ballRegex = /translate\(([-\d.]+vw), ([-\d.]+vh)\)/;
     const [, ballCurrentX, ballCurrentY] = ballTransformValue.match(
       ballRegex
     ) || [
@@ -91,7 +102,11 @@ const Canvas = () => {
 
     if (ballCurrentX >= 100 - 15 / 3) {
       const oppositionCurrentY = getOpponentPosition();
-
+      console.log(
+        "ballCurrentY, oppositionCurrentY",
+        ballCurrentY,
+        oppositionCurrentY
+      );
       if (
         Math.round((ballCurrentY - 5 / 3) / 5) * 5 -
           (oppositionCurrentY + 5) ===
@@ -144,11 +159,34 @@ const Canvas = () => {
   };
 
   useEffect(() => {
+    const pingTimer = setInterval(() => {
+      !isPaused && setPing(PING_VALUES[Math.floor(Math.random() * 3)]);
+    }, 10000);
+
     const gameLoop = setInterval(!isPaused && updateBallPosition, 100);
-    return () => clearInterval(gameLoop);
+    return () => {
+      clearInterval(gameLoop);
+      clearTimeout(pingTimer);
+    };
   }, [isPaused]);
 
+  useEffect(() => {
+    ball.current.style.transition = `unset`;
+    ball.current.style.transform = `translate(50vw, 50vh)`;
+    setIsPaused(true);
+    setTimeout(() => {
+      ball.current.style.transition = `all 0.2s ease`;
+      setIsPaused(false);
+    }, 500);
+  }, [playerScore, opponentScore]);
+
   useEventListener("keydown", handler);
+
+  const pingToText = (ping) => {
+    if (PING_VALUES.indexOf(ping) === 0) return "Perfect";
+    if (PING_VALUES.indexOf(ping) === 1) return "Average";
+    return "Poor";
+  };
 
   return (
     <div className={styles.canvas}>
@@ -156,6 +194,7 @@ const Canvas = () => {
       <Brick reference={opponent} />
       <Ball reference={ball} />
       <div className={styles.scores}>
+        <div>Ping: {pingToText(ping)}</div>
         <div>Player: {playerScore}</div>
         <div>Opponent: {opponentScore}</div>
         <button
